@@ -34,5 +34,11 @@ const Itemctrl = (function () {
 
 //App Controller
 const app = (function () {
+
+    return{
+        init: function () {
+            
+        }
+    }
     
 })(Itemctrl,UIctrl);
