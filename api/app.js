@@ -1,10 +1,5 @@
 //Storage Controller
 
-//UI Controller 
-const UIctrl = (function () {
-    
-})();
-
 //Item Controller 
 const Itemctrl = (function () {
     const Item = function (id,name,calories) {
@@ -17,7 +12,7 @@ const Itemctrl = (function () {
         items: [
             {id:0, name: 'Steak Dinner', calories: 1200},
             {id:1, name: 'Cookie', calories: 200},
-            {id:0, name: 'Fish', calories: 1000},
+            {id:2, name: 'Fish', calories: 1000},
         ],
         currentItem: null,
         totalCalories:0
@@ -25,6 +20,9 @@ const Itemctrl = (function () {
     }
 
     return {
+        getItems: function () {
+            return data.items;
+        },
         logData : function () {
             return data;
         }
@@ -32,13 +30,42 @@ const Itemctrl = (function () {
 
 })();
 
+//UI Controller 
+const UIctrl = (function () {
+
+    return {
+        populateItemsList: function (items) {
+            let html = '';
+
+            items.forEach(function (item) {
+                html += `<li class="collection-item" id="item-${item.id}">
+                <strong>${item.name}</strong> <em> ${item.calories} Calories</em>
+                <a href="#" class="secondary-content">
+                    <i class="edit-item fa fa-pencil"></i>
+                </a>
+            </li>`;
+            });
+
+            //Insert list items
+            
+            document.querySelector('#item-collection').innerHTML = html;
+        }
+    }
+})();
+
 //App Controller
-const app = (function () {
+const app = (function (Itemctrl,UIctrl) {
 
     return{
         init: function () {
-            
+            //Fetch Items
+            const items = Itemctrl.getItems();
+
+            //Populate Items
+            UIctrl.populateItemsList(items); 
         }
     }
     
 })(Itemctrl,UIctrl);
+
+app.init();
