@@ -39,6 +39,18 @@ const Itemctrl = (function () {
 
             return newItem;
         },
+
+        getTotalCalories: function () {
+            let total = 0;
+
+            data.items.forEach(function (item) {
+                total += item.calories
+            })
+
+            data.totalCalories = total;
+
+            return data.totalCalories;
+        },
         logData : function () {
             return data;
         }
@@ -53,7 +65,8 @@ const UIctrl = (function () {
         itemList: '#item-collection',
         addBtn : '.add-btn',
         itemNameInput: '#item-name',
-        itemCaloriesInput: '#item-calories'
+        itemCaloriesInput: '#item-calories',
+        totalCalories: '.total-calories'
 
     }
 
@@ -63,7 +76,7 @@ const UIctrl = (function () {
 
             items.forEach(function (item) {
                 html += `<li class="collection-item" id="item-${item.id}">
-                <strong>${item.name}</strong> <em> ${item.calories} Calories</em>
+                <strong>${item.name}: </strong> <em> ${item.calories} Calories</em>
                 <a href="#" class="secondary-content">
                     <i class="edit-item fa fa-pencil"></i>
                 </a>
@@ -92,7 +105,7 @@ const UIctrl = (function () {
             li.className = 'collection-item';
 
             li.id = `item-${item.id}`;
-            li.innerHTML = `<strong>${item.name}</strong> <em> ${item.calories} Calories</em>
+            li.innerHTML = `<strong>${item.name}: </strong> <em> ${item.calories} Calories</em>
             <a href="#" class="secondary-content">
                 <i class="edit-item fa fa-pencil"></i>
             </a>`;
@@ -106,6 +119,10 @@ const UIctrl = (function () {
         clearInput: function () {
             document.querySelector(UIselectors.itemNameInput).value = '';
             document.querySelector(UIselectors.itemCaloriesInput).value = '';
+        },
+
+        showTotalCalories: function (totalCalories) {
+            document.querySelector(UIselectors.totalCalories).textContent = totalCalories;
         },
 
         hideList: function () {
@@ -132,6 +149,11 @@ const app = (function (Itemctrl,UIctrl) {
         }else{            
             const newitem = Itemctrl.addItem(input.name,input.calories);
             UIctrl.addListItem(newItem);
+
+            const totalCalories = Itemctrl.getTotalCalories();
+
+            UIctrl.showTotalCalories(totalCalories);
+
             UIctrl.clearInput();
         }
 
@@ -150,6 +172,10 @@ const app = (function (Itemctrl,UIctrl) {
                 //Populate Items
             UIctrl.populateItemsList(items); 
             }
+
+            const totalCalories = Itemctrl.getTotalCalories();
+
+            UIctrl.showTotalCalories(totalCalories);
 
 
             loadEventListeners();
